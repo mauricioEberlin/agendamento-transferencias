@@ -1,13 +1,15 @@
 package com.mauricio.projeto.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "transferencias")
 public class Transferencia {
@@ -23,9 +25,9 @@ public class Transferencia {
     private String contaDestino;
 
     @Column(name = "valor_transferencia", nullable = false)
-    private Float valorTransferencia;
+    private Double valorTransferencia;
 
-    private Float taxa;
+    private Double taxa;
 
     @Column(name = "data_transferencia")
     private Date dataTransferencia;
