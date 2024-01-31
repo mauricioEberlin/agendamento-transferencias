@@ -3,7 +3,8 @@ package com.mauricio.projeto.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class Transferencia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "conta_origem", nullable = false)
     private String contaOrigem;
@@ -30,9 +31,9 @@ public class Transferencia {
     private Double taxa;
 
     @Column(name = "data_transferencia")
-    private Date dataTransferencia;
+    private LocalDate dataTransferencia;
 
     @Column(name = "data_agendamento")
-    private Date dataAgendamento;
-
+    private LocalDate dataAgendamento;
+    
 }

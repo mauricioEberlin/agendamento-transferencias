@@ -7,7 +7,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class AgendamentoTransferenciasApplication implements CommandLineRunner {
@@ -21,15 +24,17 @@ public class AgendamentoTransferenciasApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Date date = new Date(System.currentTimeMillis());
+		LocalDate localDate = LocalDate.now();
+
+		localDate.getDayOfMonth();
 
 		Transferencia transferencia1 = Transferencia.builder()
 				.contaOrigem("04004")
 				.contaDestino("05000")
 				.valorTransferencia(100.00)
 				.taxa(1.0)
-				.dataTransferencia(date)
-				.dataAgendamento(date)
+				.dataTransferencia(localDate)
+				.dataAgendamento(localDate)
 				.build();
 
 		transferenciaRepository.save(transferencia1);
