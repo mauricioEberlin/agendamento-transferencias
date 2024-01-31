@@ -21,8 +21,8 @@
                         <td> {{transferencia.contaDestino}} </td>
                         <td> {{transferencia.valorTransferencia}} </td>
                         <td> {{transferencia.taxa}} </td>
-                        <td> {{transferencia.dataTransferencia}} </td>
-                        <td> {{transferencia.dataAgendamento}} </td>
+                        <td> {{formataData(transferencia.dataTransferencia)}} </td>
+                        <td> {{formataData(transferencia.dataAgendamento)}} </td>
                         <td> <button @click="deletarTransferencia(transferencia)">X</button> </td>
                     </tr>
                 </tbody>
@@ -88,16 +88,36 @@ import TransferenciaService from '../services/TransferenciaService'
                 })
             },
             salvarTransferencia(){
-                TransferenciaService.salvarTransferencia(this.transferencia).then((response) => {
+                
+                const dataAtual = new Date()
+                const dataDefinida = new Date(this.transferencia.dataAgendamento)
+                const diferencaDeTempo = dataDefinida.getTime() - dataAtual.getTime()
+                const diferencaDeDias = Math.floor(diferencaDeTempo / (1000 * 60 * 60 * 24))
+
+                if (diferencaDeDias >= 51 || diferencaDeDias < -1 && this.transferencia.dataAgendamento != null) {
+                    alert("Não há taxa aplicável para essa data. O agendamento pode ser feito para o limite de 50 dias.")
+                } else if (this.transferencia.dataAgendamento == null){
+                    alert("A data não foi definida.")
+                }
+                
+                TransferenciaService.salvarTransferencia(this.transferencia).then((response) => {    
                     if (response.status === 200) {
                         this.limpar();
                         location.reload();
+                    }
+                }).catch(error => {
+                    if (error.response) {
+                        console.log(error.response.data.error);
                     }
                 })
             },
             async deletarTransferencia(transferencia){
                 const res = await TransferenciaService.deletarTransferencia(transferencia.id).then((response) => {                 
                     return response
+                }).catch(error => {
+                    if (error.response) {
+                        console.log(error.response.data.error);
+                    }
                 })
                 if (res.status === 200) {
                     this.transferencias = this.transferencias.filter(t => t.id !== transferencia.id)
@@ -109,6 +129,10 @@ import TransferenciaService from '../services/TransferenciaService'
                 this.transferencia.contaDestino = null,
                 this.transferencia.valorTransferencia = null,
                 this.transferencia.dataAgendamento = null
+            },
+            formataData(data) {
+                var val = data.split("-");
+                return `${val[2]}/${val[1]}/${val[0]}`;
             },
         },
         created() {

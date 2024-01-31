@@ -35,5 +35,5 @@ public class Transferencia {
 
     @Column(name = "data_agendamento")
     private LocalDate dataAgendamento;
-    
+
 }
